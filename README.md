@@ -106,8 +106,11 @@ clf.predict([[0, 87, 0, 95, 0, 2, 78, 2, 0]])
 ```
 
 ## Output:
-![the Logistic Regression Model to Predict the Placement Status of Student](sam.png)
+
 DATASET:
+
+![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/9fd1b92b-a584-40ce-9cba-220edaf1b3ae)
+
 
 dataset.head():
 
