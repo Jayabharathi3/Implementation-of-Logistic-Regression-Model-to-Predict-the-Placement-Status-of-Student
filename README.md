@@ -24,7 +24,7 @@ Anaconda – Python 3.7 Installation / Jupyter notebook
 7.Apply new unknown values 
 
 ## Program:
-```
+```python
 /*
 Program to implement the the Logistic Regression Model to Predict the Placement Status of Student.
 Developed by: JAYABHARATHI .S
