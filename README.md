@@ -34,178 +34,127 @@ RegisterNumber:  212222100013
 
 #import modules
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
+data=pd.read_csv("/content/Placement_Data.csv")
+data.head()
 
-#reading the file
-dataset = pd.read_csv('Placement_Data_Full_Class.csv')
-dataset
+data1=data.copy()
+data1=data1.drop(["sl_no","salary"],axis=1)#Browses the specified row or column
+data1.head()
 
-dataset.head(20)
+data1.isnull().sum()
 
-dataset.tail(20)
+data1.duplicated().sum()
 
-#droping tha serial no salary col
-dataset = dataset.drop('sl_no',axis=1)
-#dataset = dataset.drop('salary',axis=1)
+from sklearn.preprocessing import LabelEncoder
+le=LabelEncoder()
+data1["gender"]=le.fit_transform(data1["gender"])
+data1["ssc_b"]=le.fit_transform(data1["ssc_b"])
+data1["hsc_b"]=le.fit_transform(data1["hsc_b"])
+data1["hsc_s"]=le.fit_transform(data1["hsc_s"])
+data1["degree_t"]=le.fit_transform(data1["degree_t"])
+data1["workex"]=le.fit_transform(data1["workex"])
+data1["specialisation"]=le.fit_transform(data1["specialisation"] )     
+data1["status"]=le.fit_transform(data1["status"])       
+data1 
 
-dataset = dataset.drop('gender',axis=1)
-dataset = dataset.drop('ssc_b',axis=1)
-dataset = dataset.drop('hsc_b',axis=1)
-dataset
+x=data1.iloc[:,:-1]
+x
 
-dataset.shape
-
-dataset.info()
-
-#catgorising col for further labelling
-dataset["degree_t"] = dataset["degree_t"].astype('category')
-dataset["workex"] = dataset["workex"].astype('category')
-dataset["specialisation"] = dataset["specialisation"].astype('category')
-dataset["status"] = dataset["status"].astype('category')
-dataset["hsc_s"] = dataset["hsc_s"].astype('category')
-dataset.dtypes
-
-dataset.info()
-
-dataset["degree_t"] = dataset["degree_t"].cat.codes
-dataset["workex"] = dataset["workex"].cat.codes
-dataset["specialisation"] = dataset["specialisation"].cat.codes
-dataset["status"] = dataset["status"].cat.codes
-dataset["hsc_s"] = dataset["hsc_s"].cat.codes
-dataset
-
-dataset.info()
-
-dataset
-
-#selecting the features and labels
-x = dataset.iloc[:,:-1].values
-y = dataset.iloc[:,-1].values
+y=data1["status"]
 y
 
 from sklearn.model_selection import train_test_split
-x_train,x_test,y_train,y_test = train_test_split(x, y,test_size=0.2)
-dataset.head()
-
-x_train.shape
-
-x_test.shape
-
-y_train.shape
-
-y_test.shape
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.2,random_state=0)
 
 from sklearn.linear_model import LogisticRegression
-clf= LogisticRegression()
-clf.fit(x_train,y_train)
-clf.score(x_test,y_test)
+lr=LogisticRegression(solver="liblinear")
+lr.fit(x_train,y_train)
+y_pred=lr.predict(x_test)
+y_pred
 
-clf.predict([[0, 87, 0, 95, 0, 2, 78, 2, 0]])
-*/
+from sklearn.metrics import accuracy_score
+accuracy=accuracy_score(y_test,y_pred)
+accuracy
+
+from sklearn.metrics import confusion_matrix
+confusion=confusion_matrix(y_test,y_pred)
+confusion
+
+from sklearn.metrics import classification_report
+classification_report1 = classification_report(y_test,y_pred)
+print(classification_report1)
+
+lr.predict([[1,80,1,90,1,1,90,1,0,85,1,85]])
+
 ```
 
 ## Output:
 
-DATASET:
+1.Placement Data
+![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/a664d351-5452-489e-8323-6f8642b2bd65)
 
-![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/9fd1b92b-a584-40ce-9cba-220edaf1b3ae)
 
+2.Salary Data
 
-dataset.head():
 
+![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/e79158e0-cde1-4ac3-ad7b-741fab7bf6b8)
 
-![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/af7659b7-77cc-4625-a4ac-1ca852965978)
 
 
-dataset.tail():
+3. Checking the null function()
 
 
-![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/2ef000c1-10ad-405e-a1f7-bcbf0d7ef76d)
+![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/3177a6d9-bdcb-4c56-b689-ce60f5114072)
 
 
-dataset after dropping:
 
+4.Data Duplicate
 
-![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/05c72f71-7bc3-4cfc-858e-230f101cc88e)
+![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/536c075a-aae4-4f13-ac61-be9986936eb7)
 
 
-![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/adb68890-1c71-4296-b826-882dfb15a222)
 
+5.Print Data
 
-datase.shape:
+![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/cc12a379-bdc9-4046-86de-8fb0812aa5e7)
 
+![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/cc3ee47b-5b2b-4b0c-a87a-d13f4f541962)
 
-![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/d9983b11-e4fa-468e-9299-eedab244faa0)
 
+6.Data Status
 
-dataset.info()
+![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/11bd5866-a98f-4fad-837c-919c022a10f2)
 
 
-![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/c2a5bbf0-f3a4-4b60-a8ec-2f80e3280874)
+7.y_prediction array
 
+![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/f388a783-bbe2-47cf-abb2-1b4cb9d92267)
 
-dataset.dtypes
 
+8.Accuracy value
 
-![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/802058bd-9d34-44f0-acdc-6e0c3cc8200d)
 
+![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/29072677-493f-4f5e-ba2b-08a24d8cd96d)
 
-dataset.info()
 
 
-![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/84dfa710-6bc3-4217-bb1f-2c6ac323eeeb)
+9.Confusion matrix
 
+![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/15f2f330-fcf1-4bc2-88fc-f93337af126e)
 
-dataset.codes
 
 
-![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/5448b084-4d35-452a-9099-ec5d18c1a40b)
+10.Classification Report
 
+![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/9ef17dab-bd87-48e9-b2c6-1ee85027abdc)
 
-selecting the features and labels
 
 
-![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/bfbe0844-9e37-4d5f-921e-5fe35e6c644e)
+11.Prediction of LR
 
+![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/3feb3940-8814-4bf3-a8a8-74356556ad6e)
 
-dataset.head()
 
-
-![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/b6e8bab8-6f67-439e-a7cf-ae7461e4d1fe)
-
-
-x_train.shape
-
-
-![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/b6463aa0-cbf6-4257-bc79-70327ccf89a7)
-
-
-x_test.shape
-
-
-![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/3148d17b-7205-4476-8a42-eab83da3f061)
-
-
-y_train.shape
-
-
-![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/9f6ab8d7-75b4-4cf9-a921-1b65dd42a54a)
-
-
-y_test.shape:
-
-
-![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/d360598c-8e23-4b37-87f7-715680c8c8eb)
-
-
-
-![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/1adc57b2-8f2e-4929-9bfe-8416e978c875)
-
-
-clf.predict
-
-![image](https://github.com/Jayabharathi3/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120367796/c6169a36-37c4-4c94-a5f9-f093e81c9da6)
 
 
 
